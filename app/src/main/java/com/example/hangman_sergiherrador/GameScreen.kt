@@ -163,6 +163,9 @@ fun GameScreen(navController: NavController, difficulty: String) {
         ) {
             Text(text = "Reiniciar Juego", fontSize = 18.sp, fontWeight = FontWeight.Bold)
         }
+        Row (Modifier.padding(20.dp)){
+            Text(text = "Has usado ${clickedLetters.size} letras", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        }
     }
 }
 
