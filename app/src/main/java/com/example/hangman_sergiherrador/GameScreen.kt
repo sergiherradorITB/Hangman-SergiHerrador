@@ -283,12 +283,12 @@ fun HangmanImage(difficulty: String, maxAttempts: Int, attemptsLeft: Int) {
         "Easy" -> hangmanImagesEasy[maxAttempts - attemptsLeft]
         "Medium" -> hangmanImagesMedium[maxAttempts - attemptsLeft]
         "Hard" -> hangmanImagesHard[maxAttempts - attemptsLeft]
-        else -> R.drawable.hangman1 // Provide a default image resource if difficulty is unknown
+        else -> R.drawable.hangman1
     }
 
     Image(
         painter = painterResource(id = resourceId),
-        contentDescription = null, // Provide a proper contentDescription if needed
+        contentDescription = null,
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)
