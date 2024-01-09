@@ -85,7 +85,6 @@ fun GameScreen(navController: NavController, difficulty: String) {
         ) {
             val buttonsPerRow = 6
             val rows = ('A'..'Z').plus('Ñ').chunked(buttonsPerRow)
-
             rows.forEach { row ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
