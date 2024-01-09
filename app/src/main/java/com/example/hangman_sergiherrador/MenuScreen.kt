@@ -47,7 +47,7 @@ fun MenuScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .paint(
-                painterResource(id = R.drawable.fondo),
+                painterResource(id = R.drawable.fondo2),
                 contentScale = ContentScale.FillBounds)
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.Center,

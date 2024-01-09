@@ -24,8 +24,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -55,7 +58,12 @@ fun GameScreen(navController: NavController, difficulty: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .paint(
+                painterResource(id = R.drawable.fondo2),
+                contentScale = ContentScale.FillBounds)
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         // Mostrar la palabra actualmente adivinada
@@ -79,6 +87,7 @@ fun GameScreen(navController: NavController, difficulty: String) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(top = 27.dp, bottom = 10.dp)
         ) {
             val buttonsPerRow = 6
             val rows = ('A'..'Z').plus('Ñ').chunked(buttonsPerRow)
@@ -127,7 +136,8 @@ fun GameScreen(navController: NavController, difficulty: String) {
                                 }
                             },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = if (letter in clickedLetters) Color.LightGray else Color.Gray,
+                                containerColor = if (letter in clickedLetters) Color(148.0f / 161, 148.0f / 255, 148.0f / 255, 1f) else Color(87.0f / 255, 165.0f / 255, 255.0f / 255, 0.27f),
+
                             ),
                             modifier = Modifier
                                 .padding(2.dp)
@@ -221,6 +231,7 @@ private fun getWordAndMaxAttempts(difficulty: Comparable<*>): Pair<String, Int> 
 // Función para actualizar la palabra actualmente adivinada
 private fun updateGuessedWord(word: String, guessedWord: String, letter: Char): String {
     val updatedWord = StringBuilder(guessedWord)
+    // StringBuilder is a class in the Java API that provides a mutable sequence of characters -- https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiWiLDwjdCDAxXgRaQEHXsnA38QFnoECBUQAw&url=https%3A%2F%2Fwww.simplilearn.com%2Ftutorials%2Fjava-tutorial%2Fstringbuilder-in-java&usg=AOvVaw12_mECxRMijYMoQqwlxOZ2&opi=89978449
     for (i in word.indices) {
         if (word[i].equals(letter, ignoreCase = true)) {
             updatedWord[i] = letter
@@ -249,7 +260,7 @@ private fun navigateToResultScreen(
 @Composable
 fun HangmanImage(difficulty: String, maxAttempts: Int, attemptsLeft: Int) {
 
-    // Definir el array de imágenes
+    // Definir el array de imágenes faciles
     val hangmanImagesEasy = arrayOf(
         R.drawable.hangman1,
         R.drawable.hangman2,
@@ -262,7 +273,7 @@ fun HangmanImage(difficulty: String, maxAttempts: Int, attemptsLeft: Int) {
         R.drawable.hangman9_better
     )
 
-    // Definir el array de imágenes
+    // Definir el array de imágenes medianas
     val hangmanImagesMedium = arrayOf(
         R.drawable.hangman1,
         R.drawable.hangman3,
@@ -273,7 +284,7 @@ fun HangmanImage(difficulty: String, maxAttempts: Int, attemptsLeft: Int) {
         R.drawable.hangman9_better
     )
 
-    // Definir el array de imágenes
+    // Definir el array de imágenes díficiles
     val hangmanImagesHard = arrayOf(
         R.drawable.hangman1,
         R.drawable.hangman3,
@@ -291,7 +302,7 @@ fun HangmanImage(difficulty: String, maxAttempts: Int, attemptsLeft: Int) {
 
     Image(
         painter = painterResource(id = resourceId),
-        contentDescription = null,
+        contentDescription = "Hangman Photo",
         modifier = Modifier
             .fillMaxWidth()
             .height(200.dp)

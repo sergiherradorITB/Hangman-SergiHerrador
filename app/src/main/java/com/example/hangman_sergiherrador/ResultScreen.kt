@@ -25,6 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,7 +39,7 @@ fun ResultScreen(
     result: ResultType,
     attempts: Int,
     difficulty: String,
-    word:String
+    word: String
 ) {
     // Estado para almacenar la dificultad actual
     var currentDifficulty by remember { mutableStateOf(difficulty) }
@@ -44,7 +47,11 @@ fun ResultScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .paint(
+                painterResource(id = R.drawable.fondo2),
+                contentScale = ContentScale.FillBounds
+            )
+            .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -58,8 +65,7 @@ fun ResultScreen(
             contentDescription = null,
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .size(96.dp)
-                .background(MaterialTheme.colorScheme.background)
+                .size(120.dp)
         )
 
         Text(
@@ -73,7 +79,8 @@ fun ResultScreen(
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(top=20.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
@@ -117,7 +124,7 @@ fun ResultScreen(
 }
 
 
-enum class ResultType {
-    WIN,
-    LOSE
+enum class ResultType(val action:String) {
+    WIN("Ganar"),
+    LOSE("Perder")
 }
