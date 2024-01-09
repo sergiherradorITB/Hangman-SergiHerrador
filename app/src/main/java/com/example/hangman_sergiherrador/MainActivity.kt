@@ -100,7 +100,7 @@ class MainActivity : ComponentActivity() {
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.logo),
+                painter = painterResource(id = R.drawable.logo2),
                 contentDescription = "logo", alpha = alphaAnim
             )
         }
@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
         var startAnimation by remember { mutableStateOf(false) }
         val alphaAnim = animateFloatAsState(
             targetValue = if (startAnimation) 1f else 0f,
-            animationSpec = tween(durationMillis = 3000)
+            animationSpec = tween(durationMillis = 3000), label = ""
         )
         LaunchedEffect(key1 = true) {
             startAnimation = true

@@ -1,6 +1,5 @@
 package com.example.hangman_sergiherrador
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
@@ -22,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -42,11 +42,12 @@ fun ResultScreen(
     word: String
 ) {
     // Estado para almacenar la dificultad actual
-    var currentDifficulty by remember { mutableStateOf(difficulty) }
+    val currentDifficulty by remember { mutableStateOf(difficulty) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .paint(
                 painterResource(id = R.drawable.fondo2),
                 contentScale = ContentScale.FillBounds
@@ -70,7 +71,7 @@ fun ResultScreen(
 
         Text(
             text = when (result) {
-                ResultType.WIN -> "FELICIDADES!\nHas ganado después de $attempts intentos."
+                ResultType.WIN -> "FELICIDADES!\nHas ganado después de gastar $attempts vidas."
                 ResultType.LOSE -> "Lo siento, has perdido. La palabra era: $word."
             },
             fontSize = 18.sp,
@@ -124,7 +125,7 @@ fun ResultScreen(
 }
 
 
-enum class ResultType(val action:String) {
-    WIN("Ganar"),
-    LOSE("Perder")
+enum class ResultType {
+    WIN,
+    LOSE
 }

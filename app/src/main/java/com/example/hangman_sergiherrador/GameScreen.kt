@@ -1,26 +1,21 @@
 package com.example.hangman_sergiherrador
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,23 +26,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameScreen(navController: NavController, difficulty: String) {
     // Obtener la palabra y el número de intentos según la dificultad
-    var (word, maxAttempts) = remember { getWordAndMaxAttempts(difficulty) }
+    val (word, maxAttempts) = remember { getWordAndMaxAttempts(difficulty) }
 
     // Estado para la palabra actualmente adivinada
     var guessedWord by remember { mutableStateOf("_".repeat(word.length)) }
 
     // Estado para el número de intentos restantes
-    var attemptsLeft by remember { mutableStateOf(maxAttempts) }
+    var attemptsLeft by remember { mutableIntStateOf(maxAttempts) }
 
     // Estado para indicar si el juego ha terminado
     var gameEnded by remember { mutableStateOf(false) }
@@ -58,9 +50,11 @@ fun GameScreen(navController: NavController, difficulty: String) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .paint(
                 painterResource(id = R.drawable.fondo2),
-                contentScale = ContentScale.FillBounds)
+                contentScale = ContentScale.FillBounds
+            )
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -124,24 +118,23 @@ fun GameScreen(navController: NavController, difficulty: String) {
                                         )
                                     } else if (attemptsLeft == 0) {
                                         gameEnded = true
-                                        val attempsToAccert = maxAttempts - attemptsLeft
                                         navigateToResultScreen(
                                             navController,
                                             ResultType.LOSE,
                                             difficulty,
-                                            attempsToAccert,
+                                            maxAttempts,
                                             word
                                         )
                                     }
                                 }
                             },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = if (letter in clickedLetters) Color(148.0f / 161, 148.0f / 255, 148.0f / 255, 1f) else Color(87.0f / 255, 165.0f / 255, 255.0f / 255, 0.27f),
-
+                                containerColor = Color(87.0f / 255, 165.0f / 255, 255.0f / 255, 0.27f),
                             ),
                             modifier = Modifier
                                 .padding(2.dp)
-                                .weight(1f)
+                                .weight(1f),
+                            enabled = letter !in clickedLetters // si la letra está en clicked letters se deshabilita
                         ) {
                             Text(
                                 text = letter.toString(),
@@ -157,14 +150,7 @@ fun GameScreen(navController: NavController, difficulty: String) {
         // Botón para reiniciar el juego
         Button(
             onClick = {
-                // Reiniciar el juego al presionar el botón
-                val (newWord, newAttempts) = getWordAndMaxAttempts(difficulty)
-                word = newWord
-                maxAttempts = newAttempts
-                guessedWord = "_".repeat(word.length)
-                attemptsLeft = maxAttempts
-                gameEnded = false
-                clickedLetters = emptySet()
+                navController.navigate(Routes.GameScreen.createRoute(difficulty))
             },
             modifier = Modifier
                 .fillMaxWidth()

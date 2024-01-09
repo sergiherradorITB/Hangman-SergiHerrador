@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialogDefaults.shape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -20,7 +20,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,10 +45,11 @@ fun MenuScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .paint(
                 painterResource(id = R.drawable.fondo2),
-                contentScale = ContentScale.FillBounds)
-            .padding(horizontal = 16.dp),
+                contentScale = ContentScale.FillBounds
+            ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -68,12 +68,16 @@ fun MenuScreen(navController: NavController) {
 
         val difficulties = listOf("Easy", "Medium", "Hard")
 
-        Box(Modifier.padding(20.dp)) {
+        Box(
+            Modifier.padding()
+        ) {
             // DropdownMenu primero
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .background(Color(255f / 255, 0f / 255, 238f / 255, 0.1f)),
             ) {
                 difficulties.forEach { difficulty ->
                     DropdownMenuItem(text = { Text(text = difficulty) }, onClick = {
@@ -91,17 +95,18 @@ fun MenuScreen(navController: NavController) {
                 readOnly = true,
                 modifier = Modifier
                     .clickable { expanded = true }
-                    .fillMaxWidth()
+                    .fillMaxWidth(0.85f)
+                    .background(Color(255f / 255, 0f / 255, 238f / 255, 0.1f))
             )
         }
         val context = LocalContext.current
 
         // Botón de Play
         Button(
-
             onClick = {
-                if (selectedText == "Difficulty"){
-                    Toast.makeText(context, "Escoge una dificultad válida!", Toast.LENGTH_SHORT).show()
+                if (selectedText == "Difficulty") {
+                    Toast.makeText(context, "Escoge una dificultad válida!", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
                     navController.navigate(Routes.GameScreen.createRoute(selectedText))
                 }
@@ -111,6 +116,7 @@ fun MenuScreen(navController: NavController) {
             ),
             modifier = Modifier
                 .fillMaxWidth(0.5f)
+                .padding(top = 20.dp)
         ) {
             Text(text = "Play", fontSize = 18.sp, fontWeight = FontWeight.Bold)
         }
@@ -138,7 +144,9 @@ fun MyDialog(show: Boolean, onDismiss: () -> Unit) {
                 Modifier
                     .background(Color.White)
                     .padding(24.dp)
-                    .fillMaxWidth()
+                    .fillMaxHeight(0.9f)
+                    .fillMaxHeight(0.7f)
+                    .verticalScroll(rememberScrollState())
             ) {
                 Text(
                     text = "Bienvenido al Hangman hecho por Sergi \n \n" +
