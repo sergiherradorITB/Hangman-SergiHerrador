@@ -100,12 +100,11 @@ fun GameScreen(navController: NavController, difficulty: String) {
                                     }
                                     // Actualizar la palabra actualmente adivinada
                                     guessedWord = updateGuessedWord(word, guessedWord, letter)
-                                    // Agregar la letra a las letras clicadas
-                                    clickedLetters = clickedLetters + letter
+                                    // Agregar la letra a la lista vacia de letras clicadas
+                                    clickedLetters += letter
 
                                     // Verificar si el juego ha terminado
                                     if (guessedWord == word) {
-                                        println("Word guessed!")
                                         gameEnded = true
                                         val attempsToAccert = maxAttempts - attemptsLeft
                                         navigateToResultScreen(
@@ -133,7 +132,10 @@ fun GameScreen(navController: NavController, difficulty: String) {
                             modifier = Modifier
                                 .padding(2.dp)
                                 .weight(1f),
-                            enabled = letter !in clickedLetters // si la letra está en clicked letters se deshabilita
+                            enabled = when (letter) {
+                                in clickedLetters -> false
+                                else -> true
+                            } // si la letra está en clicked letters se deshabilita
                         ) {
                             Text(
                                 text = letter.toString(),
@@ -215,14 +217,16 @@ private fun getWordAndMaxAttempts(difficulty: Comparable<*>): Pair<String, Int> 
 
 // Función para actualizar la palabra actualmente adivinada
 private fun updateGuessedWord(word: String, guessedWord: String, letter: Char): String {
-    val updatedWord = StringBuilder(guessedWord)
-    // StringBuilder is a class in the Java API that provides a mutable sequence of characters -- https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiWiLDwjdCDAxXgRaQEHXsnA38QFnoECBUQAw&url=https%3A%2F%2Fwww.simplilearn.com%2Ftutorials%2Fjava-tutorial%2Fstringbuilder-in-java&usg=AOvVaw12_mECxRMijYMoQqwlxOZ2&opi=89978449
+    val wordArray = word.toCharArray()
+    val updatedWordArray = guessedWord.toCharArray()
+
     for (i in word.indices) {
-        if (word[i].equals(letter, ignoreCase = true)) {
-            updatedWord[i] = letter
+        if (wordArray[i] == letter) {
+            updatedWordArray[i] = letter
         }
     }
-    return updatedWord.toString()
+    return String(updatedWordArray)
+    // String(updatedWordArray) convierte la array a string sin que sea la posicion de memoria, une los char!
 }
 
 private fun navigateToResultScreen(
@@ -245,7 +249,7 @@ private fun navigateToResultScreen(
 @Composable
 fun HangmanImage(difficulty: String, maxAttempts: Int, attemptsLeft: Int) {
 
-    // Definir el array de imágenes faciles
+    // Definir el array de imágenes fáciles
     val hangmanImagesEasy = arrayOf(
         R.drawable.hangman1,
         R.drawable.hangman2,

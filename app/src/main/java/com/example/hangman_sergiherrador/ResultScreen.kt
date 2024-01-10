@@ -57,13 +57,13 @@ fun ResultScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val icon = when (result) {
-            ResultType.WIN -> Icons.Default.Star
-            ResultType.LOSE -> Icons.Default.Clear
+            ResultType.WIN -> Icons.Default.Star // Si ganamos el icono será una estrellita
+            ResultType.LOSE -> Icons.Default.Clear // Si perdemos el icono será una 'X'
         }
 
         Icon(
             imageVector = icon,
-            contentDescription = null,
+            contentDescription = "Icono que se muestra al perder/ganar",
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .size(120.dp)
